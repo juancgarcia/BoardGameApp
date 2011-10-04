@@ -4,6 +4,7 @@
 * Licensed under the terms of the Apache Public License
 * Please see the LICENSE included with this distribution for details.
 **/
+tt = appNamespace;
 
 (function() {	
 	//Globally available theme object to hold theme colors/constants
@@ -12,11 +13,11 @@
 		grayTextColor:'#888888',
 		headerColor:'#333333',
 		lightBlue:'#006cb1',
-		darkBlue:'#93caed',
-		fontFamily: tt.os({
-			iphone:'Helvetica Neue',
-			android:'Droid Sans'
-		})
+		darkBlue:'#93caed'//,
+		// fontFamily: tt.os({
+			// iphone:'Helvetica Neue',
+			// android:'Droid Sans'
+		// })
 	};
 
 	//All shared property sets are declared here.
@@ -30,122 +31,122 @@
 							Ti.Platform.displayCaps.platformHeight),
 		
 		//we use these for default components
-		Button: {
-			backgroundImage:'images/button_bg.png',
-			height:50,
-			width:250,
-			color:'#000',
-			font: {
-				fontSize:18,
-				fontWeight:'bold'
-			}
-		},
+		// Button: {
+			// backgroundImage:'images/button_bg.png',
+			// height:50,
+			// width:250,
+			// color:'#000',
+			// font: {
+				// fontSize:18,
+				// fontWeight:'bold'
+			// }
+		// },
 		Label: {
 			color:tt.ui.theme.textColor,
 			font: {
-				fontFamily:tt.ui.theme.fontFamily,
+				//fontFamily:tt.ui.theme.fontFamily,
 				fontSize:12
 			},
 			height:'auto'
 		},
 		Window: {
-			backgroundImage:'images/ruff.png',
+			//backgroundImage:'images/ruff.png',
 			navBarHidden:true,
 			softInputMode:(Ti.UI.Android) ? Ti.UI.Android.SOFT_INPUT_ADJUST_RESIZE : ''
 		},
-		TableView: {
-			backgroundImage:'images/ruff.png',
-			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE
-		},
-		TableViewRow: {
-			backgroundImage:'images/tweet_bg.png',
-			selectedBackgroundColor: tt.ui.theme.darkBlue, //I know, this is dumb, but it's currently inconsistent x-platform
-			backgroundSelectedColor: tt.ui.theme.darkBlue,
-			//height:110,
-			className:'tvRow'
-		},
-		TextField: {
-			height:55,
-			borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
-			color:'#000000'
-		},
-		TextArea: {
-			borderRadius:10,
-			backgroundColor:'#efefef',
-			//gradient will only work on iOS
-			backgroundGradient:{
-				type:'linear',
-				colors:[
-					{color:'#efefef',position:0.0},
-					{color:'#cdcdcd',position:0.50},
-					{color:'#efefef',position:1.0}
-				]
-			}
-		},
+		// TableView: {
+			// backgroundImage:'images/ruff.png',
+			// separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE
+		// },
+		// TableViewRow: {
+			// backgroundImage:'images/tweet_bg.png',
+			// selectedBackgroundColor: tt.ui.theme.darkBlue, //I know, this is dumb, but it's currently inconsistent x-platform
+			// backgroundSelectedColor: tt.ui.theme.darkBlue,
+			// //height:110,
+			// className:'tvRow'
+		// },
+		// TextField: {
+			// height:55,
+			// borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+			// color:'#000000'
+		// },
+		// TextArea: {
+			// borderRadius:10,
+			// backgroundColor:'#efefef',
+			// //gradient will only work on iOS
+			// backgroundGradient:{
+				// type:'linear',
+				// colors:[
+					// {color:'#efefef',position:0.0},
+					// {color:'#cdcdcd',position:0.50},
+					// {color:'#efefef',position:1.0}
+				// ]
+			// }
+		// },
 		
 		//we use these as JS-based 'style classes'
 		animationDuration: 500,
 		stretch: {
 			top:0,bottom:0,left:0,right:0
-		},
-		variableTopRightButton: {
-			top:5,
-			right:5,
-			height:30,
-			width:tt.os({
-				iphone:60,
-				android:'auto'
-			}),
-			color:'#ffffff',
-			font: {
-				fontSize:12,
-				fontWeight:'bold'
-			},
-			backgroundImage:'images/button_bg_black.png'
-		},
-		topRightButton: {
-			top:5,
-			right:5,
-			height:30,
-			width:38
-		},
-		headerText: {
-			top:8,
-			height:'auto',
-			textAlign:'center',
-			color:tt.ui.theme.headerColor,
-			font: {
-				fontFamily:tt.ui.theme.fontFamily,
-				fontSize:18,
-				fontWeight:'bold'
-			}
-		},
-		headerView: {
-			backgroundImage:'images/header_bg.png',
-			height:40
-		},
-		boldHeaderText: {
-			height:'auto',
-			color:'#000000',
-			font: {
-				fontFamily:tt.ui.theme.fontFamily,
-				fontSize:14,
-				fontWeight:'bold'
-			}
-		},
-		smallText: {
-			color:tt.ui.theme.grayTextColor,
-			font: {
-				fontFamily:tt.ui.theme.fontFamily,
-				fontSize:10
-			},
-			height:'auto'
-		},
-		spacerRow: {
-			backgroundImage:'images/spacer_row.png',
-			height:30,
-			className:'spacerRow'
-		}
+		}//,
+		// variableTopRightButton: {
+			// top:5,
+			// right:5,
+			// height:30,
+			// width:tt.os({
+				// iphone:60,
+				// android:'auto'
+			// }),
+			// color:'#ffffff',
+			// font: {
+				// fontSize:12,
+				// fontWeight:'bold'
+			// },
+			// backgroundImage:'images/button_bg_black.png'
+		// },
+		// topRightButton: {
+			// top:5,
+			// right:5,
+			// height:30,
+			// width:38
+		// },
+		// headerText: {
+			// top:8,
+			// height:'auto',
+			// textAlign:'center',
+			// color:tt.ui.theme.headerColor,
+			// font: {
+				// fontFamily:tt.ui.theme.fontFamily,
+				// fontSize:18,
+				// fontWeight:'bold'
+			// }
+		// },
+		// headerView: {
+			// backgroundImage:'images/header_bg.png',
+			// height:40
+		// },
+		// boldHeaderText: {
+			// height:'auto',
+			// color:'#000000',
+			// font: {
+				// fontFamily:tt.ui.theme.fontFamily,
+				// fontSize:14,
+				// fontWeight:'bold'
+			// }
+		// },
+		// smallText: {
+			// color:tt.ui.theme.grayTextColor,
+			// font: {
+				// fontFamily:tt.ui.theme.fontFamily,
+				// fontSize:10
+			// },
+			// height:'auto'
+		// },
+		// spacerRow: {
+			// backgroundImage:'images/spacer_row.png',
+			// height:30,
+			// className:'spacerRow'
+		// }
 	};
 })();
 

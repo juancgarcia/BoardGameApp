@@ -1,10 +1,14 @@
+var appNamespace = {};
+
 Ti.include('boardGameApp/grid.js');
+
+appNamespace.ui = {};
 Ti.include('boardGameApp/styles.js');
 
 Titanium.UI.setBackgroundColor('#000');
 
 
-var //winStats,
+var winStats,
 	wrapperConfig,
 	gameContainer,
 	gameBoard,
@@ -21,21 +25,25 @@ win.orientationModes = [
 
 win.addEventListener('open', function() {
 	
-	// winStats = win.size;
+	winStats = win.size;
 	
-	//dollarDollar = $$;
+	var dollar = $$;/*{
+		platformMin: Math.min(winStats.width, winStats.height),
+		platformMax: Math.max(winStats.width, winStats.height),
+		containerShrink: .9
+	};*/dollar.containerShrink = .9;
 
-	// var scrollerSize = function() {
-		// var _size = {}, _minDimension = Math.min(winStats.width * .9, winStats.height * .9);
-		// _size.width = Math.floor(_minDimension/*winStats.width * .9*/);
-		// _size.height = Math.floor(_minDimension/*winStats.height * .75*/);
-		// return _size;
-	// };
+	var scrollerSize = function() {
+		var _size = {}, _minDimension = Math.min(winStats.width * dollar.containerShrink, winStats.height * dollar.containerShrink);
+		_size.width = Math.floor(_minDimension/*winStats.width * .9*/);
+		_size.height = Math.floor(_minDimension/*winStats.height * .75*/);
+		return _size;
+	};
 	
 	gameContainer = Ti.UI.createView({/*Ti.UI.createScrollView({*/
-		width: $$.platformMin * .9,
+		width: dollar.platformMin * dollar.containerShrink,
 		//top:0,
-		height: $$.platformMin * .9,
+		height: dollar.platformMin * dollar.containerShrink,
 		borderColor:'#aaa',
 		borderWidth:2,
 		backgroundColor:'#fff',
@@ -43,8 +51,8 @@ win.addEventListener('open', function() {
 	});
 	
 	overlay = Ti.UI.createView({/*Ti.UI.createScrollView({*/
-		width: $$.platformMin * .9,
-		height: $$.platformMin * .9,
+		width: dollar.platformMin * dollar.containerShrink,
+		height: dollar.platformMin * dollar.containerShrink,
 		top:0
 	});
 	
@@ -68,7 +76,7 @@ win.addEventListener('open', function() {
 	var gridConfig = {
 		rows: 4,
 		cols: 4,
-		size: Math.min($$.platformMin * .9, $$.platformMin * .9),
+		size: Math.min(dollar.platformMin * dollar.containerShrink, dollar.platformMin * dollar.containerShrink),
 		containerObj: gameBoard
 	};
 	
@@ -114,13 +122,6 @@ win.addEventListener('open', function() {
 	var animatePrimary = Titanium.UI.createAnimation();
 	animatePrimary.transform = transformPrimary;
 	animatePrimary.duration = 600;
-	
-	
-	var transformSecondary = Titanium.UI.create2DMatrix().scale(2.0);
-	
-	var animateSecondary = Titanium.UI.createAnimation();
-	animateSecondary.transform = transformSecondary;
-	animateSecondary.duration = 600;
 
 	// when this animation completes, scale to normal size
 	// a.addEventListener('complete', function()
@@ -144,26 +145,29 @@ win.addEventListener('open', function() {
 			
 			
         	var tempTrans = Titanium.UI.create2DMatrix().scale(2.0).translate( xTrans, yTrans);
-        	var tempAnim = Titanium.UI.createAnimation({transform: tempTrans, duration: 600});
+        	var tempAnim = Titanium.UI.createAnimation();
 			tempAnim.transform = tempTrans;
 			tempAnim.duration = 600;
 			
 			gameContainer.animate(tempAnim);
             overlay.width = 0;
             overlay.height = 0;
+            
+        	zoomed_in = !zoomed_in;
+        	e.handled = true;
         }
-        zoomed_in = !zoomed_in;
 	});	
  
 	/*gameContainer*//*gameBoard*/win.addEventListener(/*'scale'*/'doubletap', function(e)
 	{		 
-        if (zoomed_in)
+        if (!e.handled && zoomed_in)
         {   
             gameContainer.animate(animatePrimary);
-            overlay.width = $$.platformMin * .9;
-            overlay.height = $$.platformMin * .9;
+            overlay.width = dollar.platformMin * dollar.containerShrink;
+            overlay.height = dollar.platformMin * dollar.containerShrink;
+            
+        	zoomed_in = !zoomed_in;
         }
-        zoomed_in = !zoomed_in;
 	});
 	
 	
