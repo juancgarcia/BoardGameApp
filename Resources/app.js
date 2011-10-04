@@ -1,33 +1,41 @@
 Ti.include('boardGameApp/grid.js');
+Ti.include('boardGameApp/styles.js');
 
 Titanium.UI.setBackgroundColor('#000');
 
 
-var winStats,
+var //winStats,
 	wrapperConfig,
-	scroller,
-	wrapper,
+	gameContainer,
+	gameBoard,
 	puzzleGrid;
 
 var win = Titanium.UI.createWindow({ backgroundColor:'#ddd' });
-win.orientationModes = [ Titanium.UI.PORTRAIT ];
+win.orientationModes = [
+	Titanium.UI.PORTRAIT,
+	Titanium.UI.LANDSCAPE_LEFT,
+	Titanium.UI.LANDSCAPE_RIGHT,
+	Titanium.UI.UPSIDE_PORTRAIT
+];
 
 
 win.addEventListener('open', function() {
 	
-	winStats = win.size;
-
-	var scrollerSize = function() {
-		var _size = {}, _minDimension = Math.min(winStats.width * .9, winStats.height * .9);
-		_size.width = Math.floor(_minDimension/*winStats.width * .9*/);
-		_size.height = Math.floor(_minDimension/*winStats.height * .75*/);
-		return _size;
-	};
+	// winStats = win.size;
 	
-	scroller = Ti.UI.createView({/*Ti.UI.createScrollView({*/
-		width: scrollerSize().width,
-		top:0,
-		height: scrollerSize().height,
+	//dollarDollar = $$;
+
+	// var scrollerSize = function() {
+		// var _size = {}, _minDimension = Math.min(winStats.width * .9, winStats.height * .9);
+		// _size.width = Math.floor(_minDimension/*winStats.width * .9*/);
+		// _size.height = Math.floor(_minDimension/*winStats.height * .75*/);
+		// return _size;
+	// };
+	
+	gameContainer = Ti.UI.createView({/*Ti.UI.createScrollView({*/
+		width: $$.platformMin * .9,
+		//top:0,
+		height: $$.platformMin * .9,
 		borderColor:'#aaa',
 		borderWidth:2,
 		backgroundColor:'#fff',
@@ -35,38 +43,39 @@ win.addEventListener('open', function() {
 	});
 	
 	overlay = Ti.UI.createView({/*Ti.UI.createScrollView({*/
-		width: scrollerSize().width,
-		height: scrollerSize().height,
+		width: $$.platformMin * .9,
+		height: $$.platformMin * .9,
 		top:0
 	});
 	
 	
-	wrapper = Ti.UI.createView({
+	gameBoard = Ti.UI.createView({
 		//top:0,
 		//left:0
 	});
 	
-	win.add(scroller);
-	scroller.add(wrapper);
+	win.add(gameContainer);
+	gameContainer.add(gameBoard);
+	//win.add(gameBoard);
 	win.add(overlay);
 	
-	// wrapper.addEventListener('touchmove', function(e){
-		// Ti.API.info('wrapper touched');
-		// //var _scrollType = wrapper.scrollType;
-		// //Ti.API.info('wrapper scrollType: '+_scrollType);
+	// gameBoard.addEventListener('touchmove', function(e){
+		// Ti.API.info('gameBoard touched');
+		// //var _scrollType = gameBoard.scrollType;
+		// //Ti.API.info('gameBoard scrollType: '+_scrollType);
 	// });
 	
 	var gridConfig = {
 		rows: 4,
 		cols: 4,
-		size: Math.min(scrollerSize().height, scrollerSize().width),
-		containerObj: wrapper
+		size: Math.min($$.platformMin * .9, $$.platformMin * .9),
+		containerObj: gameBoard
 	};
 	
 	gridConfig.subSize = Math.floor(gridConfig.size/Math.max(gridConfig.cols, gridConfig.rows));
 	
-	wrapper.width = gridConfig.subSize * gridConfig.cols;
-	wrapper.height = gridConfig.subSize * gridConfig.rows;
+	gameBoard.width = gridConfig.subSize * gridConfig.cols;
+	gameBoard.height = gridConfig.subSize * gridConfig.rows;
 	puzzleGrid = Grid.createGrid(gridConfig);
 	
 	// default state is zoom-in
@@ -97,7 +106,7 @@ win.addEventListener('open', function() {
 	};
 	
 	//var assignZoom = function(config) {		
-		//wrapper.addEventListener('doubletap', toggleZoom );
+		//gameBoard.addEventListener('doubletap', toggleZoom );
 	//};
 
 	var transformPrimary = Titanium.UI.create2DMatrix().scale(1.0);
@@ -139,20 +148,20 @@ win.addEventListener('open', function() {
 			tempAnim.transform = tempTrans;
 			tempAnim.duration = 600;
 			
-			wrapper.animate(tempAnim);
+			gameContainer.animate(tempAnim);
             overlay.width = 0;
             overlay.height = 0;
         }
         zoomed_in = !zoomed_in;
 	});	
  
-	scroller.addEventListener(/*'scale'*/'doubletap', function(e)
+	/*gameContainer*//*gameBoard*/win.addEventListener(/*'scale'*/'doubletap', function(e)
 	{		 
         if (zoomed_in)
         {   
-            wrapper.animate(animatePrimary);
-            overlay.width = scrollerSize().width;
-            overlay.height = scrollerSize().height;
+            gameContainer.animate(animatePrimary);
+            overlay.width = $$.platformMin * .9;
+            overlay.height = $$.platformMin * .9;
         }
         zoomed_in = !zoomed_in;
 	});
