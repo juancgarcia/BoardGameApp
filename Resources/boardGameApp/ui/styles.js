@@ -4,24 +4,23 @@
 * Licensed under the terms of the Apache Public License
 * Please see the LICENSE included with this distribution for details.
 **/
-tt = appNamespace;
 
 (function() {	
 	//Globally available theme object to hold theme colors/constants
-	tt.ui.theme = {
+	appNamespace.ui.theme = {
 		textColor:'#000000',
 		grayTextColor:'#888888',
 		headerColor:'#333333',
 		lightBlue:'#006cb1',
 		darkBlue:'#93caed'//,
-		// fontFamily: tt.os({
+		// fontFamily: appNamespace.os({
 			// iphone:'Helvetica Neue',
 			// android:'Droid Sans'
 		// })
 	};
 
 	//All shared property sets are declared here.
-	tt.ui.properties = {
+	appNamespace.ui.properties = {
 		//grab platform dimensions only once to save a trip over the bridge
 		platformWidth: Ti.Platform.displayCaps.platformWidth,
 		platformHeight: Ti.Platform.displayCaps.platformHeight,
@@ -29,6 +28,7 @@ tt = appNamespace;
 							Ti.Platform.displayCaps.platformHeight),
 		platformMax: Math.max(Ti.Platform.displayCaps.platformWidth,
 							Ti.Platform.displayCaps.platformHeight),
+		containerShrink: .9,
 		
 		//we use these for default components
 		// Button: {
@@ -42,15 +42,16 @@ tt = appNamespace;
 			// }
 		// },
 		Label: {
-			color:tt.ui.theme.textColor,
+			color:appNamespace.ui.theme.textColor,
 			font: {
-				//fontFamily:tt.ui.theme.fontFamily,
+				//fontFamily:appNamespace.ui.theme.fontFamily,
 				fontSize:12
 			},
 			height:'auto'
 		},
 		Window: {
 			//backgroundImage:'images/ruff.png',
+			backgroundColor:'#ddd',
 			navBarHidden:true,
 			softInputMode:(Ti.UI.Android) ? Ti.UI.Android.SOFT_INPUT_ADJUST_RESIZE : ''
 		},
@@ -60,8 +61,8 @@ tt = appNamespace;
 		// },
 		// TableViewRow: {
 			// backgroundImage:'images/tweet_bg.png',
-			// selectedBackgroundColor: tt.ui.theme.darkBlue, //I know, this is dumb, but it's currently inconsistent x-platform
-			// backgroundSelectedColor: tt.ui.theme.darkBlue,
+			// selectedBackgroundColor: appNamespace.ui.theme.darkBlue, //I know, this is dumb, but it's currently inconsistent x-platform
+			// backgroundSelectedColor: appNamespace.ui.theme.darkBlue,
 			// //height:110,
 			// className:'tvRow'
 		// },
@@ -93,7 +94,7 @@ tt = appNamespace;
 			// top:5,
 			// right:5,
 			// height:30,
-			// width:tt.os({
+			// width:appNamespace.os({
 				// iphone:60,
 				// android:'auto'
 			// }),
@@ -114,9 +115,9 @@ tt = appNamespace;
 			// top:8,
 			// height:'auto',
 			// textAlign:'center',
-			// color:tt.ui.theme.headerColor,
+			// color:appNamespace.ui.theme.headerColor,
 			// font: {
-				// fontFamily:tt.ui.theme.fontFamily,
+				// fontFamily:appNamespace.ui.theme.fontFamily,
 				// fontSize:18,
 				// fontWeight:'bold'
 			// }
@@ -129,15 +130,15 @@ tt = appNamespace;
 			// height:'auto',
 			// color:'#000000',
 			// font: {
-				// fontFamily:tt.ui.theme.fontFamily,
+				// fontFamily:appNamespace.ui.theme.fontFamily,
 				// fontSize:14,
 				// fontWeight:'bold'
 			// }
 		// },
 		// smallText: {
-			// color:tt.ui.theme.grayTextColor,
+			// color:appNamespace.ui.theme.grayTextColor,
 			// font: {
-				// fontFamily:tt.ui.theme.fontFamily,
+				// fontFamily:appNamespace.ui.theme.fontFamily,
 				// fontSize:10
 			// },
 			// height:'auto'
@@ -152,4 +153,4 @@ tt = appNamespace;
 
 //global shortcut for UI properties, since these get used A LOT. polluting the global
 //namespace, but for a good cause (saving keystrokes)
-var $$ = tt.ui.properties;
+var $$ = appNamespace.ui.properties;
