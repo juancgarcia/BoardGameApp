@@ -96,11 +96,29 @@
 			return -1 * tileSize * multiplyer;
 		};
 		
+		
+		/*		
+		// [0-1.5) no trans
+		// (1.5-2.5) trans 1 subsize unit
+		// (2.5-4) trans 2 subsize units
+		*/
+		var getTransFromGridUnits = function(units){
+			if(units < 1.5)
+				return 0;
+				
+			else if(units < 2.5)
+				return 1;
+				
+			else
+				return 2;
+		};
+		
 		if(appNamespace.ui.PanAndZoom && appNamespace.ui.PanAndZoom.setup){
 			appNamespace.ui.PanAndZoom.setup({
 				container: gameBoard,
 				zoom: {
 					multiplyer: 2,
+					translationFunc: customTranslationDistance,
 					state: {
 						zoomedOut: true,
 					},
@@ -125,61 +143,27 @@
 				// }
 			});
 		}
-	 
-		// gameBoard.addEventListener('doubletap', function(_event)
-		// {
-			// var point = _event.source.convertPointToView({x:_event.x, y:_event.y}, this);
-// 			
-	        // if (!zoomed_in)
-	        // {   
-	        	// var xTrans, yTrans;
-// 				
-				// xTrans = customTranslationDistance(point.x, gridConfig.subSize);
-				// yTrans = customTranslationDistance(point.y, gridConfig.subSize);
-// 				
-// 				
-	        	// var tempTrans = Titanium.UI.create2DMatrix().scale(2.0).translate( xTrans, yTrans);
-	        	// var tempAnim = Titanium.UI.createAnimation();
-				// tempAnim.transform = tempTrans;
-				// tempAnim.duration = 600;
-// 				
-				// this.animate(tempAnim);
-// 	            
-	        	// zoomed_in = !zoomed_in;
-	        	// _event.consumed = true;
-	        // }
-		// });	
-	 
-		// gameBoard.addEventListener('doubletap', function(_event)
-		// {		 
-	        // if (!_event.consumed && zoomed_in)
-	        // {   
-	            // this.animate(animatePrimary);
-// 	            
-	        	// zoomed_in = !zoomed_in;
-	        // }
-		// });
 		
+		//test draggable implementation
 		
-		/*		
-		// [0-1.5) no trans
-		// (1.5-2.5) trans 1 subsize unit
-		// (2.5-4) trans 2 subsize units
-		*/
-		var getTransFromGridUnits = function(units){
-			if(units < 1.5)
-				return 0;
-				
-			else if(units < 2.5)
-				return 1;
-				
-			else
-				return 2;
+		var ontouchmoveCallback = function (_event) {
+			var point;
+			if(_event && _event.source) {
+				point = _event.source.convertPointToView({x: _event.x, y: _event.y}, this);
+				Ti.API.log('DEBUG','TouchMove! '+'x: '+point.x+', y: '+point.y);
+			}
+			//Ti.API.log('DEBUG','TouchMove!');
 		};
 		
+		gameBoard.addEventListener('touchmove', ontouchmoveCallback);
 		
-		//var gridSize = Math.max(scrollerSize().height, scrollerSize().width);
-		//var gridSubSize = Math.floor(gridSize/Math.max(cols, rows));
+		
+		
+		var tapCallback = function (_event) {
+			Ti.API.log('DEBUG','Tap!!');
+		};
+		
+		gameBoard.addEventListener('singletap', tapCallback);
 		
 		return gameView;
 	};

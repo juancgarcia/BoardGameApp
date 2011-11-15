@@ -161,6 +161,7 @@
 
 //Include major UI components and styling properties
 Ti.include(
+	'/lib/PanAndZoom.js',
 	'/boardGameApp/ui/styles.js',
 	'/boardGameApp/ui/grid.js',	
 	'/boardGameApp/ui/ApplicationWindow.js',
