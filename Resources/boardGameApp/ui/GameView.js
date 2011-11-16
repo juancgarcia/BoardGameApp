@@ -25,6 +25,14 @@
 			gameBoard = Ti.UI.createView({
 				//top:0,
 				//left:0
+			}),
+			
+			dragToken = Ti.UI.createView({
+				backgroundColor:'#0b0'
+			}),
+			
+			dropSpot = Ti.UI.createView({
+				backgroundColor:'#00b'
 			});
 			
 			// var wrapperShadow = Ti.UI.createView({
@@ -58,7 +66,20 @@
 		gameBoard.width = gridConfig.subSize * gridConfig.cols;
 		gameBoard.height = gridConfig.subSize * gridConfig.rows;
 		
-		var puzzleGrid = Grid.createGrid(gridConfig);
+		
+		gameBoard.add(dropSpot);
+		dropSpot.width = dropSpot.height = 80;
+		dropSpot.right = 20;
+		dropSpot.bottom = 20;		
+		
+		gameBoard.add(dragToken);		
+		dragToken.width = dragToken.height = 50;
+		dragToken.left = 20;//-1 ( gameBoard.width / 2) -
+		dragToken.top = 20;
+		
+		
+		
+		//var puzzleGrid = Grid.createGrid(gridConfig);
 	
 		var transformPrimary = Titanium.UI.create2DMatrix().scale(1.0);
 		
@@ -146,24 +167,140 @@
 		
 		//test draggable implementation
 		
-		var ontouchmoveCallback = function (_event) {
-			var point;
-			if(_event && _event.source) {
-				point = _event.source.convertPointToView({x: _event.x, y: _event.y}, this);
-				Ti.API.log('DEBUG','TouchMove! '+'x: '+point.x+', y: '+point.y);
+		var dragging = false,
+			coord = {
+				touchStart: {
+					x: null,
+					y: null
+				},
+				touchMove: {
+					x: null,
+					y: null
+				},
+				draggableStart: {
+					x: null,
+					y: null
+				},
+				draggableMove: {
+					x: null,
+					y: null
+				}				
+			},
+			skip = 2,
+			skipItr = 0;
+		
+		var dragTouchStart = function(draggable, contextPoint){			
+			dragging = true;
+			
+			if(coord.draggableMove.x === null || coord.draggableMove.y === null){				
+				coord.draggableStart = {
+					x: draggable.top,
+					y: draggable.left
+				};
+			} else {
+				coord.draggableStart.x = coord.draggableMove.x;
+				coord.draggableStart.y = coord.draggableMove.y;
 			}
-			//Ti.API.log('DEBUG','TouchMove!');
+			coord.touchStart = {
+				x: contextPoint.x,
+				y: contextPoint.y
+			};
 		};
 		
-		gameBoard.addEventListener('touchmove', ontouchmoveCallback);
+		var dragTouchMove = function(draggable, contextPoint){
+			if(skipItr < skip){
+				skipItr++;
+				return;
+			} else {
+				skipItr = 0;
+			}
+			
+			coord.touchMove = {
+				x: contextPoint.x,
+				y: contextPoint.y
+			};
+
+			diff = {dx: contextPoint.x - coord.touchStart.x, dy: contextPoint.y - coord.touchStart.y};
+			
+			//draggable.left = coord.draggableStart.x + diff.dx;
+			//draggable.top = coord.draggableStart.y + diff.dy;
+			
+			coord.draggableMove = {
+				x: coord.draggableStart.x + diff.dx,
+				y: coord.draggableStart.y + diff.dy
+			};
+			
+			draggable.animate({
+				left: coord.draggableMove.x,
+				top: coord.draggableMove.y,
+				duration:1
+			});			
+		};
 		
+		var dragTouchEnd = function(draggable, contextPoint){
+			dragging = false;
+		};
 		
+		var drag = function(_event){
+			// movement is based on diff between outercontext and lastXY
+			// assuming top,left as origin 0,0
+			var point = _event.source.convertPointToView({x: _event.x, y: _event.y}, gameBoard);
+			var draggable = this;
+			var diff;
+			 
+			switch(_event.type){
+				case 'touchstart':
+					if(!dragging){
+						dragTouchStart(draggable, point);
+					}
+					break;
+					
+				case 'touchmove':
+					if(dragging){
+						dragTouchMove(draggable, point);
+					}
+					break;
+					
+				case 'touchend':
+				case 'touchcancel':
+					dragTouchEnd(draggable, point);
+					break;
+			}
+			Ti.API.debug(_event.type+' - '+this.name+' { x: '+point.x+', y: '+point.y+' }');
+		};
+		
+		var ontouchmoveCallback = function (_event) {
+			var point, name;
+			if(_event && _event.source && !_event.handled) {
+				point = _event.source.convertPointToView({x: _event.x, y: _event.y}, gameBoard);
+				
+				drag(this,_event, point);
+				
+				if(this.name)
+					name = this.name;
+				Ti.API.debug('TouchMove! ('+name+')'+'x: '+point.x+', y: '+point.y);
+				_event.handled = true;
+			}
+			//Ti.API.debug('TouchMove!');
+		};
 		
 		var tapCallback = function (_event) {
-			Ti.API.log('DEBUG','Tap!!');
+			var name = '';
+			if(this.name)
+				name = this.name;
+			Ti.API.debug('Tap!! ('+name+')');
 		};
 		
-		gameBoard.addEventListener('singletap', tapCallback);
+		dragToken.name = 'DragToken';
+		dragToken.addEventListener('touchstart', drag, false);
+		dragToken.addEventListener('touchmove', drag, false);
+		dragToken.addEventListener('touchend', drag, false);
+		dragToken.addEventListener('touchcancel', drag, false);
+		//dragToken.addEventListener('singletap', tapCallback);
+		
+		gameBoard.name = 'GameBoard';
+		//gameBoard.addEventListener('touchmove', ontouchmoveCallback);
+		//gameBoard.addEventListener('singletap', tapCallback);
 		
 		return gameView;
 	};

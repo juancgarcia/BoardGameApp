@@ -268,7 +268,7 @@ var exports = {}; var panAndZoomInternalNamespace = {};
 	
 	var setup = function(_config){			
 		if(_config && _config.zoom) {
-			Ti.API.debug(_config.container);
+			//Ti.API.debug(_config.container);
 			panAndZoomInternalNamespace.applyConfig(_config, panAndZoomInternalNamespace.defaultConfig);
 			panAndZoomInternalNamespace.makeZoomable(_config.container, _config.zoom);//makeZoomable(_config.container, _config.zoom);
 		}
